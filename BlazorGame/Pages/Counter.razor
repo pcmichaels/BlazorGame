@@ -1,0 +1,24 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<button class="btn btn-primary" @onclick="IncrementLeft">Across</button>
+<button class="btn btn-primary" @onclick="IncrementTop">Down</button>
+
+<div style="top: @(top)px; left: @(left)px; position: absolute">test</div>
+
+@code {
+    private int top = 0;
+    private int left = 0;
+
+    private void IncrementLeft()
+    {
+        left += 10;
+    }
+
+    private void IncrementTop()
+    {
+        top += 10;
+    }
+
+}
