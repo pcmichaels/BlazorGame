@@ -1,3 +1,4 @@
+using BlazorGame.GameLogic;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,9 @@ namespace BlazorGame
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddSingleton<IWorld, World>();
+            builder.Services.AddSingleton<IPlayer, Player>();
+            builder.Services.AddSingleton<IControls, Controls>();
 
             await builder.Build().RunAsync();
         }

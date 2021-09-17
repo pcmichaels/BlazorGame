@@ -1,76 +1,26 @@
 ﻿@page "/"
 @using System.Timers
+@using BlazorGame.GameLogic
+@inject IPlayer Player
+@inject IControls Controls
+@inject IWorld World
 
 <div @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp" @onkeydown:preventDefault 
     style="background-color: #000000; width: 80vw; height: 80vh; margin: auto"
     tabindex="0" @ref="mainDiv">
-    <div style="color: white; top: @(_top)px; left: @(_left)px; width: 20px; position: relative">test</div>
+    <div style="color: white; top: @(Player.Top)px; left: @(Player.Left)px; width: 20px; position: relative">test</div>
 </div>
 
 @code {
-    private const int FLOOR = 300;
-    private const int GRAVITY = 1;
-    private const int SPEED = 3;
-    private const int JUMP_FORCE = 10;
-
-    private int _top = FLOOR;
-    private int _left = 0;
-    private int _forceUp = 0;
-    private int _forceRight = 0;
 
     private ElementReference mainDiv;    
     private Timer _timer;
 
-    private void Walk(int amt) => _forceRight = amt;
+    private void HandleKeyUp(KeyboardEventArgs e) =>
+        Controls.KeyUp(e.Code);    
 
-    private void Jump()
-    {
-        if (_forceUp == 0)
-        {
-            _forceUp += JUMP_FORCE;
-        }
-    }
-
-    private void HandleKeyUp(KeyboardEventArgs e)
-    {
-        switch (e.Code)
-        {
-            case "ArrowLeft": // Left
-                Walk(0);
-                break;
-
-            case "ArrowRight": // Right
-                Walk(0);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    private void HandleKeyDown(KeyboardEventArgs e)
-    {
-        switch (e.Code)
-        {
-            case "ArrowLeft": // Left
-                if (_forceUp == 0)
-                {
-                    Walk(-SPEED);
-                }
-                break;
-            case "ArrowUp": // Up
-                Jump();
-                break;
-            case "ArrowRight": // Right
-                if (_forceUp == 0)
-                {
-                    Walk(SPEED);
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    private void HandleKeyDown(KeyboardEventArgs e) =>    
+        Controls.KeyDown(e.Code);    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -93,36 +43,16 @@
 
     private void TimerElapsed(Object source, System.Timers.ElapsedEventArgs e)
     {
-        Console.WriteLine($"Tick {e.SignalTime}");
-        Console.WriteLine($"Tick left {_left}");
-        Console.WriteLine($"Tick top {_top}");
-        Console.WriteLine($"Tick force right {_forceRight}");
-        Console.WriteLine($"Tick force up {_forceUp}");
-
         Update();
         Draw();
     }
 
     private void Update()
     {
-        ApplyGravity();
-        _top -= _forceUp;
-
-        if (_top > FLOOR)
-        {
-            _top = FLOOR;
-            _forceUp = 0;
-        }
-
-        if (_left <= 0 && _forceRight < 0) _forceRight = 0;
-
-        _left += _forceRight;
+        World.ApplyPhysics();
     }
 
-    private void Draw() => this.StateHasChanged();    
+    private void Draw() => 
+        this.StateHasChanged();    
 
-    private void ApplyGravity()
-    {
-        _forceUp -= GRAVITY;
-    }
 }
