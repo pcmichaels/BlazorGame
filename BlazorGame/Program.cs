@@ -22,6 +22,7 @@ namespace BlazorGame
             builder.Services.AddSingleton<IWorld, World>();
             builder.Services.AddSingleton<IPlayer, Player>();
             builder.Services.AddSingleton<IControls, Controls>();
+            builder.Services.AddSingleton<IGraphics, Graphics>();
 
             await builder.Build().RunAsync();
         }

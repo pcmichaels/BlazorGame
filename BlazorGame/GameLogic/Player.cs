@@ -11,6 +11,8 @@ namespace BlazorGame.GameLogic
         public int Left { get; }
         public bool IsJumping { get; }
 
+        public bool IsWalking { get; }
+
         void WalkRight();
         void WalkLeft();
         void Jump();
@@ -27,7 +29,8 @@ namespace BlazorGame.GameLogic
 
         public int Top { get => _top; }
         public int Left { get => _left; }
-        public bool IsJumping { get => _forceUp > 0; }
+        public bool IsJumping => _forceUp > 0;
+        public bool IsWalking => _forceRight != 0;
 
         public void Jump()
         {
