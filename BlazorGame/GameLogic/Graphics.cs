@@ -47,7 +47,5 @@ namespace BlazorGame.GameLogic
 
             _lastUpdate = DateTime.Now;
         }
-
-
     }
 }

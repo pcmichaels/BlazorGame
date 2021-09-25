@@ -12,15 +12,13 @@
     <div style="color: white; top: @(Player.Top)px; left: @(Player.Left)px; width: 16px; height: 17px; overflow: hidden; position: relative">
         <img 
             src="/images/Willy-Sprite-Sheet.png" 
-            @ref="playerImage" 
             style="margin: 0 @(Graphics.PlayerOffset)px; transform: scaleX(@(Graphics.PlayerDirection))" />
     </div>
 </div>
 
 @code {
 
-    private ElementReference mainDiv;    
-    private ElementReference playerImage;   
+    private ElementReference mainDiv;        
     private Timer _timer;
 
     private void HandleKeyUp(KeyboardEventArgs e) =>
