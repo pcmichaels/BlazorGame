@@ -10,8 +10,9 @@ namespace BlazorGame.GameLogic
         public int Top { get; }
         public int Left { get; }
         public bool IsJumping { get; }
-
         public bool IsWalking { get; }
+        public bool IsWalkingLeft { get; }
+        public bool IsWalkingRight { get; }
 
         void WalkRight();
         void WalkLeft();
@@ -25,12 +26,15 @@ namespace BlazorGame.GameLogic
         private int _top = WorldSettings.FLOOR;
         private int _left = 0;
         private int _forceUp = 0;
-        private int _forceRight = 0;        
+        private int _forceRight = 0;
+        private int _direction = 1;
 
         public int Top { get => _top; }
         public int Left { get => _left; }
         public bool IsJumping => _forceUp > 0;
         public bool IsWalking => _forceRight != 0;
+        public bool IsWalkingLeft => _direction < 0;
+        public bool IsWalkingRight => _direction > 0;
 
         public void Jump()
         {
@@ -57,8 +61,12 @@ namespace BlazorGame.GameLogic
                 _top = WorldSettings.FLOOR;
                 _forceUp = 0;
             }
-
-            if (_left <= 0 && _forceRight < 0) _forceRight = 0;
+            
+            if (_left <= 0 && _forceRight < 0) 
+                _forceRight = 0;
+            else if (_forceRight != 0)
+                _direction = _forceRight;
+            System.Diagnostics.Debug.WriteLine($"Direction {_direction}");
 
             _left += _forceRight;
             

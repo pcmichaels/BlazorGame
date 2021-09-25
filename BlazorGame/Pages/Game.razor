@@ -10,7 +10,10 @@
     style="background-color: #000000; width: 80vw; height: 80vh; margin: auto"
     tabindex="0" @ref="mainDiv">
     <div style="color: white; top: @(Player.Top)px; left: @(Player.Left)px; width: 16px; height: 17px; overflow: hidden; position: relative">
-        <img src="/images/Willy-Sprite-Sheet.png" @ref="playerImage" style="margin: 0 @(Graphics.PlayerOffset)px" />
+        <img 
+            src="/images/Willy-Sprite-Sheet.png" 
+            @ref="playerImage" 
+            style="margin: 0 @(Graphics.PlayerOffset)px; transform: scaleX(@(Graphics.PlayerDirection))" />
     </div>
 </div>
 
