@@ -1,0 +1,73 @@
+﻿@page "/"
+@using System.Timers
+@using BlazorGame.GameLogic
+@inject IPlayer Player
+@inject IControls Controls
+@inject IWorld World
+@inject IGraphics Graphics
+
+<div @onkeydown="HandleKeyDown" @onkeyup="HandleKeyUp" @onkeydown:preventDefault 
+    style="background-color: #000000; width: 80vw; height: 80vh; margin: auto"
+    tabindex="0" @ref="mainDiv">
+    <div style="color: white; top: @(Player.Top)px; left: @(Player.Left)px; width: 16px; height: 17px; overflow: hidden; position: relative">
+        <img 
+            src="/images/Willy-Sprite-Sheet.png" 
+            style="margin: 0 @(Graphics.PlayerOffset)px; transform: scaleX(@(Graphics.PlayerDirection))" />
+    </div>
+</div>
+
+@code {
+
+    private ElementReference mainDiv;        
+    private Timer _timer;
+
+    private void HandleKeyUp(KeyboardEventArgs e) =>
+        Controls.KeyUp(e.Code);    
+
+    private void HandleKeyDown(KeyboardEventArgs e) =>    
+        Controls.KeyDown(e.Code);    
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {        
+        if (firstRender)
+        {
+            Console.WriteLine("OnAfterRenderAsync: first render");
+
+            await mainDiv.FocusAsync();            
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine("OnInitializedAsync");
+
+        _timer = new Timer();
+        _timer.Interval = 16;
+        _timer.Elapsed += TimerElapsed;
+        _timer.AutoReset = true;
+        _timer.Enabled = true;                
+
+        return base.OnInitializedAsync();
+    }
+
+    private void TimerElapsed(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        Update();
+        Draw();
+    }
+
+    private void Update()
+    {
+        World.ApplyPhysics();
+        if (Player.IsWalking)
+        {
+            Graphics.CyclePlayer();
+        }
+    }
+
+    private void Draw()
+    {
+        this.StateHasChanged();
+    }
+
+}
